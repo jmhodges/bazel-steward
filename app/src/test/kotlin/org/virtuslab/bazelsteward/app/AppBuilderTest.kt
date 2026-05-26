@@ -61,6 +61,15 @@ class AppBuilderTest {
     }
   }
 
+  @Test
+  fun `ensureWorkspaceIsAcceptable ignores untracked files`(@TempDir tempDir: Path) {
+    val git = initRepo(tempDir, "main")
+    tempDir.resolve("gha-creds-abc.json").writeText("{}\n")
+    runBlocking {
+      AppBuilder.ensureWorkspaceIsAcceptable(git, allowDirtyWorkspace = false)
+    }
+  }
+
   private fun initRepo(tempDir: Path, branch: String): GitClient {
     val git = GitClient(tempDir)
     runBlocking {

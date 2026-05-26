@@ -50,7 +50,7 @@ object AppBuilder {
   }
 
   suspend fun ensureWorkspaceIsAcceptable(gitClient: GitClient, allowDirtyWorkspace: Boolean) {
-    val status = gitClient.run("status", "--porcelain").trim()
+    val status = gitClient.run("status", "--porcelain", "--untracked-files=no").trim()
     if (status.isEmpty()) return
     val indented = status.lines().joinToString("\n") { "  $it" }
     if (allowDirtyWorkspace) {
